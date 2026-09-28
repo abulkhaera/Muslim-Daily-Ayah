@@ -1,0 +1,178 @@
+/* Muslim Daily Ayah — namespaced under .mda to avoid theme collisions.
+   Palette matches the site design system: navy #123C8C / accent #2657B8 /
+   ink #0E1A32 / body #5A6B87 / tint #F4F7FC / border #E2E8F3.
+
+   No background/surface styling on the closed-state card by design — the
+   Elementor container supplies that. This file only sets layout, type and
+   colour-as-foreground (text, icons), never a fill behind the card.        */
+
+.mda{
+  --mda-navy:#123C8C;
+  --mda-navy-dark:#0D2E6D;
+  --mda-accent:#2657B8;
+  --mda-ink:#0E1A32;
+  --mda-body:#5A6B87;
+  --mda-tint:#F4F7FC;
+  --mda-border:#E2E8F3;
+  --mda-radius-popup:10px;
+  --mda-font:'Plus Jakarta Sans','Jakarta',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --mda-font-ar:'Amiri','Traditional Arabic','Scheherazade New',serif;
+  position:relative;
+  font-family:var(--mda-font);
+  width:100%;
+  max-width:100%;
+}
+.mda *,.mda *::before,.mda *::after{box-sizing:border-box}
+.mda p{margin:0}
+
+.mda .screen-reader-text{
+  position:absolute!important;width:1px!important;height:1px!important;
+  padding:0!important;margin:-1px!important;border:0!important;
+  overflow:hidden!important;clip:rect(0 0 0 0)!important;clip-path:inset(50%)!important;
+  white-space:nowrap!important;
+}
+
+/* -------------------------------------------------------------- card */
+/* Every clickable element here is reset with `all:unset`, then explicit
+   `!important` no-background/no-border rules follow it. The theme on this
+   site applies a background to bare <button> tags with enough specificity
+   to beat a plain `all:unset` reset (confirmed — the card was rendering
+   with a theme-supplied magenta fill before this was added), so the
+   no-background rule is escalated the same way the RateStop filter-reset
+   issue was: match the specificity fight with !important rather than
+   hoping a lower-specificity reset wins.                                */
+.mda__card{
+  all:unset;
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;gap:10px;
+  width:100%;box-sizing:border-box;
+  padding:28px 30px;
+  cursor:pointer;
+  font-family:inherit;
+  text-align:left;
+}
+.mda__card,
+.mda__card:hover,
+.mda__card:focus,
+.mda__card:active,
+.mda__card:visited{
+  background:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.mda[data-theme="dark"] .mda__card{color:#fff}
+.mda[data-theme="light"] .mda__card{color:var(--mda-ink)}
+.mda__card:hover{transform:translateY(-1px);transition:transform .18s ease}
+.mda__card:focus-visible{outline:2px solid var(--mda-accent);outline-offset:3px;border-radius:4px}
+
+.mda__eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  opacity:.72;
+}
+
+.mda__arabic{
+  font-family:var(--mda-font-ar);
+  font-size:clamp(20px,4vw,30px);line-height:1.9;font-weight:700;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+.mda__translation{
+  font-size:15px;line-height:1.6;font-style:italic;opacity:.92;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+.mda__ref{font-size:12.5px;font-weight:600;opacity:.75}
+
+.mda__cta{
+  display:inline-flex;align-items:center;gap:6px;margin-top:4px;
+  font-size:13.5px;font-weight:700;
+}
+.mda[data-theme="dark"] .mda__cta{color:#fff}
+.mda[data-theme="light"] .mda__cta{color:var(--mda-navy)}
+.mda__card:hover .mda__cta svg{transform:translateX(3px);transition:transform .15s ease}
+
+.mda__badge{
+  position:absolute;top:14px;right:14px;font-size:10.5px;font-weight:600;
+  background:#8A5A00;color:#fff;padding:4px 9px;border-radius:999px;line-height:1.2;
+  z-index:2;
+}
+
+/* ----------------------------------------------------------------- modal
+   The popup is a full-viewport overlay, not something sitting inside your
+   Elementor container, so — unlike the card — it keeps its own white panel
+   background: an overlay with no surface of its own would be unreadable
+   against whatever page content sits behind it.                          */
+.mda__modal{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.mda__modal[hidden]{display:none}
+.mda__modal-backdrop{all:unset;position:absolute;inset:0;background:rgba(14,26,50,.55);backdrop-filter:blur(2px);cursor:pointer}
+
+.mda__modal-panel{
+  position:relative;z-index:1;background:#fff;color:var(--mda-ink);
+  width:70vw;max-width:720px;max-height:86vh;overflow-y:auto;
+  border-radius:var(--mda-radius-popup);
+  padding:36px 32px 30px;
+  box-shadow:0 24px 60px rgba(14,26,50,.35);
+  animation:mda-pop .18s ease-out;
+}
+@media (prefers-reduced-motion:reduce){.mda__modal-panel{animation:none}}
+@keyframes mda-pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+
+.mda__modal-close{
+  all:unset;
+  position:absolute;top:14px;right:14px;
+  width:36px;height:36px;min-width:36px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-sizing:border-box;
+}
+.mda__modal-close,
+.mda__modal-close:hover,
+.mda__modal-close:focus,
+.mda__modal-close:active{
+  background:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  color:var(--mda-navy)!important;
+}
+.mda__modal-close:hover svg{opacity:.65}
+.mda__modal-close:focus-visible{outline:2px solid var(--mda-accent);outline-offset:2px;border-radius:6px}
+
+.mda__modal-arabic{
+  font-family:var(--mda-font-ar);font-size:clamp(22px,5vw,32px);line-height:2;
+  font-weight:700;color:var(--mda-ink);margin-bottom:18px;
+  padding-right:44px; /* keep clear of the close button at narrow widths */
+}
+.mda__modal-translation{font-size:16px;line-height:1.7;font-style:italic;color:var(--mda-body);margin-bottom:10px}
+.mda__modal-ref{font-size:13px;font-weight:700;color:var(--mda-accent)}
+
+.mda__divider{border:0;border-top:1px solid var(--mda-border);margin:22px 0}
+
+.mda__tafsir-heading{
+  font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--mda-accent);margin:0 0 10px;
+}
+.mda__tafsir-body{font-size:14.5px;line-height:1.75;color:var(--mda-ink)}
+.mda__tafsir-body p{margin:0 0 12px}
+.mda__tafsir-body p:last-child{margin-bottom:0}
+
+.mda__attribution{margin-top:16px;font-size:12.5px;color:var(--mda-body)}
+.mda__attribution a{color:var(--mda-navy);font-weight:600;text-decoration:none}
+.mda__attribution a:hover{text-decoration:underline}
+
+/* ------------------------------------------------------------------ mobile
+   70vw is a phone-unfriendly width (≈260px on a 375px screen) so it's
+   overridden below rather than applied literally at every size.          */
+@media (max-width:640px){
+  .mda__card{padding:20px 18px}
+  .mda__arabic{font-size:clamp(19px,6vw,24px)}
+
+  .mda__modal{padding:14px}
+  .mda__modal-panel{
+    width:100%;max-width:100%;
+    max-height:90vh;
+    padding:26px 18px 22px;
+  }
+  .mda__modal-arabic{padding-right:38px}
+  .mda__modal-close{top:10px;right:10px;width:40px;height:40px;min-width:40px}
+}
